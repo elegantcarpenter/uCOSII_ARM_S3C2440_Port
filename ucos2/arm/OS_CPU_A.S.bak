@@ -1,0 +1,140 @@
+.section .text 
+
+           .global OSTickISR
+           .global OSStartHighRdy
+           .global OSCtxSw
+           .global OSIntCtxSw
+           .global OSCPUSaveSR
+           .global OSCPURestoreSR
+           
+					 .extern OSTCBCur
+					 .extern OSTaskSwHook
+					 .extern OSTCBHighRdy
+					 .extern OSPrioCur
+					 .extern OSPrioHighRdy
+
+
+
+OSCPUSaveSR:
+	mrs r0, cpsr
+	orr r1, r0, #0xc0
+	msr cpsr, r1
+	mov pc, lr																		
+
+
+OSCPURestoreSR:
+	msr cpsr, r0
+	mov pc, lr
+
+
+OSStartHighRdy:
+
+	bl OSTaskSwHook
+
+	ldr r0, =OSRunning
+	mov r1,#1
+	strb r1, [r0]
+	
+	ldr r0, =OSTCBHighRdy
+	ldr r1, [r0]
+	ldr sp, [r1]
+
+	ldmfd sp!,{r0}
+	msr spsr,r0
+
+	ldmfd sp!,{r0-r12,lr,pc}^   @pop reg from stack and put spsr to cpsr
+
+
+loop:
+	b loop	
+
+
+OSTickISR:
+	stmfd sp!,{lr}
+	bl OSIntEnter
+	bl OSTimeTick
+	bl OSIntExit
+	ldmfd sp!,{lr}
+	mov pc,lr
+
+
+@call from swi int routine
+OSCtxSw:
+	bl OSTaskSwHook
+	
+	@OSTCBCur = OSTCBHighRdy
+	ldr r0, =OSTCBHighRdy
+	ldr r1, [r0]
+	ldr r0, =OSTCBCur
+	str r1, [r0]
+	
+	@OSPrioCur = OSPrioHighRdy
+	ldr r0, =OSPrioHighRdy
+	ldrb r1, [r0]
+	ldr r0, =OSPrioCur
+	strb r1, [r0]
+	
+	@Stack pointer = OSTCBHighRdy->OSTCBStkPt
+	ldr r0, =OSTCBHighRdy
+	ldr r1, [r0]
+	ldr r2, [r1]
+	mov sp, r2
+	
+	@Restore all processor registers from the new task¡¦s stack;	
+	ldmfd sp!,{r0}
+	msr spsr,r0	
+	ldmfd sp!,{r0-r12,lr,pc}^
+
+
+OSIntCtxSw:
+	bl OSTaskSwHook
+	
+	@OSTCBCur = OSTCBHighRdy
+	ldr r0, =OSTCBHighRdy
+	ldr r1, [r0]
+	ldr r0, =OSTCBCur
+	str r1, [r0]
+	
+	@OSPrioCur = OSPrioHighRdy
+	ldr r0, =OSPrioHighRdy
+	ldrb r1, [r0]
+	ldr r0, =OSPrioCur
+	strb r1, [r0]
+	
+	@Stack pointer = OSTCBHighRdy->OSTCBStkPt
+	ldr r0, =OSTCBHighRdy
+	ldr r1, [r0]
+	ldr r2, [r1]
+	mov sp, r2
+	
+	@Restore all processor registers from the new task¡¦s stack;	
+	ldmfd sp!,{r0}
+	msr spsr,r0	
+	ldmfd sp!,{r0-r12,lr,pc}^
+
+	@ldmfd sp!,{r0}
+	@msr cpsr,r0
+	@ldmfd sp!,{r0-r12,lr}
+	@mov pc,lr	
+
+
+
+GPBCON:
+	.word 0x56000010
+GPBDAT:
+	.word 0x56000014
+	
+	
+str1:
+	.asciz "OSStartHighRdy1\r\n"
+str2:
+	.asciz "OSStartHighRdy2\r\n"
+str3:
+	.asciz "OSStartHighRdy3\r\n"
+str4:
+	.asciz "OSStartHighRdy4\r\n"
+str5:
+	.asciz "OSStartHighRdy5\r\n"				
+	
+str6:
+	.asciz "OSStartHighRdy6\r\n"					

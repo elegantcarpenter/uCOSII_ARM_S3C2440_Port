@@ -1,0 +1,14 @@
+_start:
+
+           .global OSTickISR
+           .global OSStartHighRdy
+           .global OSCtxSw
+           .global OSIntCtxSw
+           
+OSTickISR:
+OSStartHighRdy:
+OSCtxSw:
+OSIntCtxSw:
+
+
+

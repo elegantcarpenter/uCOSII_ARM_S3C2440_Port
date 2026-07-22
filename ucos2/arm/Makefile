@@ -1,0 +1,7 @@
+First:OS_CPU_A.o OS_CPU_C.o
+
+OS_CPU_A.o:OS_CPU_A.S
+		arm-linux-as -g3 OS_CPU_A.S -o OS_CPU_A.o
+OS_CPU_C.o:OS_CPU_C.C OS_CPU.H
+		arm-linux-gcc -O0 -g3 -c -x c OS_CPU_C.C -o OS_CPU_C.o -I../../
+

@@ -1,0 +1,22 @@
+OBJS:=OS_CORE.o OS_FLAG.o OS_MBOX.o OS_MEM.o OS_MUTEX.o OS_Q.o OS_SEM.o OS_TASK.o OS_TIME.o
+
+ucos2:$(OBJS)
+
+OS_CORE.o:OS_CORE.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_CORE.C -I..
+OS_FLAG.o:OS_FLAG.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_FLAG.C -I..
+OS_MBOX.o:OS_MBOX.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_MBOX.C -I..
+OS_MEM.o:OS_MEM.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_MEM.C -I..
+OS_MUTEX.o:OS_MUTEX.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_MUTEX.C -I..
+OS_Q.o:OS_Q.C uCOS_II.H 
+	arm-linux-gcc -O0 -g3 -c -x c OS_Q.C -I..
+OS_SEM.o:OS_SEM.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_SEM.C -I..
+OS_TASK.o:OS_TASK.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_TASK.C -I..
+OS_TIME.o:OS_TIME.C uCOS_II.H
+	arm-linux-gcc -O0 -g3 -c -x c OS_TIME.C -I..

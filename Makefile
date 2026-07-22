@@ -1,0 +1,21 @@
+OBJS:=s3c2440/start.o s3c2440/main.o ucos2/arm/OS_CPU_A.o ucos2/arm/OS_CPU_C.o ucos2/OS_CORE.o ucos2/OS_FLAG.o ucos2/OS_MBOX.o ucos2/OS_MEM.o ucos2/OS_MUTEX.o ucos2/OS_Q.o ucos2/OS_SEM.o ucos2/OS_TASK.o ucos2/OS_TIME.o
+#OBJS:=s3c2440/start.o s3c2440/main.o
+LIBS:=/opt/toolschain/4.4.3/lib/gcc/arm-none-linux-gnueabi/4.4.3/
+#LIBS2:=/opt/toolschain/4.4.3/arm-none-linux-gnueabi/sys-root/usr/lib/
+Link:First
+	arm-linux-ld -nostdlib -O0 -g -o out.exe $(OBJS) -L$(LIBS) -lgcc -Ttext=0x30000000
+
+First:Second
+	make -C ucos2
+Second:Third
+	make -C ucos2/arm
+Third:
+	make -C s3c2440
+
+
+clean:
+	rm -f *.o
+	rm -f ucos2/*.o
+	rm -f ucos2/arm/*.o
+	rm -f s3c2440/*.o
+	rm -f s3c2440/*.exe
