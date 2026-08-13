@@ -1,6 +1,6 @@
 # Porting uCOS2 OS onto Friendly ARM Tiny2440(Samsung s3c2440 SOC)
 
-
+完成日: 2014-8-30
 
 ## 說明:
 
@@ -198,6 +198,6 @@
 
         (3) 三個Task能正常的做Context Switch
 
-        (4) OS的Wait(Idle功能OK
+        (4) OS的Wait(Idle功能OK)
 
         (5) UART能印出訊息
